@@ -47,6 +47,12 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   @override
+  void dispose() {
+    searchController.clear();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -65,6 +71,7 @@ class _SearchPageState extends State<SearchPage> {
           child: Row(children: [
             Expanded(
               child: TextField(
+                onSubmitted: initiateSearchMethod,
                 controller: searchController,
                 style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(
@@ -75,7 +82,7 @@ class _SearchPageState extends State<SearchPage> {
             ),
             GestureDetector(
               onTap: () {
-                initiateSearchMethod();
+                initiateSearchMethod('');
               },
               child: Container(
                 width: 40,
@@ -102,7 +109,8 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  initiateSearchMethod() async {
+  Future<void> initiateSearchMethod(String s) async {
+    print(s);
     if (searchController.text.isNotEmpty) {
       setState(() {
         _isLoading = true;
@@ -123,7 +131,7 @@ class _SearchPageState extends State<SearchPage> {
     return _hasSearched
         ? ListView.builder(
             shrinkWrap: true,
-            itemCount: searchSnapshot!.docs.length,
+            itemCount: searchSnapshot == null ? 0 : searchSnapshot!.docs.length,
             itemBuilder: (context, index) {
               return groupTile(
                   userName,

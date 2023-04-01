@@ -25,13 +25,21 @@ class _HomePageState extends State<HomePage> {
   bool _isLoading = false;
   Stream? groups;
   String groupName = '';
+  List allGroupNames = [];
+
+  getAllGroups() async {
+    allGroupNames = await DatabaseService().getAllGroupNames();
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getUserData();
+    getAllGroups();
   }
 
+  String errorText = '';
   //sting manipulation
   String getId(String res) {
     return res.substring(0, res.indexOf('_'));
@@ -213,7 +221,7 @@ class _HomePageState extends State<HomePage> {
                   : TextField(
                       onChanged: (value) {
                         setState(() {
-                          groupName = value;
+                          groupName = value.trim();
                         });
                       },
                       style: TextStyle(color: Colors.black),
@@ -247,21 +255,30 @@ class _HomePageState extends State<HomePage> {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  if (groupName != '') {
-                    setState(() {
-                      _isLoading = true;
-                    });
-                    DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
-                        .createGroup(userName,
-                            FirebaseAuth.instance.currentUser!.uid, groupName)
-                        .whenComplete(() {
+                  if (allGroupNames.contains(groupName)) {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                            '  "Group Already exist! Choose a different Name"')));
+                  } else {
+                    if (groupName != '') {
                       setState(() {
-                        _isLoading = false;
-                        Navigator.of(context).pop();
-                        showSnackbar(context, Colors.green,
-                            "Group created successfully!");
+                        getAllGroups();
+                        _isLoading = true;
                       });
-                    });
+                      DatabaseService(
+                              uid: FirebaseAuth.instance.currentUser!.uid)
+                          .createGroup(userName,
+                              FirebaseAuth.instance.currentUser!.uid, groupName)
+                          .whenComplete(() {
+                        setState(() {
+                          _isLoading = false;
+                          Navigator.of(context).pop();
+                          showSnackbar(context, Colors.green,
+                              "Group created successfully!");
+                        });
+                      });
+                    }
                   }
                 },
                 child: Text(

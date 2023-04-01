@@ -124,7 +124,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                           child: const Text(
-                            "Sign In",
+                            "Sign Up",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
@@ -151,8 +151,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                       decoration: TextDecoration.underline),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
-                                      Constants.nextScreen(
-                                          context, LoginPage());
+                                      Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  LoginPage()),
+                                          (route) => false);
                                     })
                             ]),
                       ),

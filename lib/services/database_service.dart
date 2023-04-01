@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseService {
   final String? uid;
+
   DatabaseService({this.uid});
 
   final CollectionReference userCollection =
@@ -30,6 +31,16 @@ class DatabaseService {
   //getting user groups
   getUserGroups() async {
     return userCollection.doc(uid).snapshots();
+  }
+
+  Future<List<String>> getAllGroupNames() async {
+    QuerySnapshot snaps = await groupCollection.get();
+    List<String> allGroupNames = [];
+
+    for (var x in snaps.docs) {
+      allGroupNames.add(x['groupName']);
+    }
+    return allGroupNames;
   }
 
   //creating a group
@@ -75,8 +86,24 @@ class DatabaseService {
   }
 
   //search
-  searchByGroupName(String groupName) {
-    return groupCollection.where('groupName', isEqualTo: groupName).get();
+  searchByGroupName(String groupName) async {
+    QuerySnapshot snaps = await groupCollection.get();
+    var snapshots = [];
+
+    for (var x in snaps.docs) {
+      if (groupName.trim().toLowerCase() ==
+          x['groupName'].toString().toLowerCase()) {
+        snapshots.add(x);
+      }
+    }
+
+    if (snapshots.isNotEmpty) {
+      return groupCollection
+          .where('groupName', isEqualTo: snapshots[0]['groupName'])
+          .get();
+    } else {
+      return null;
+    }
   }
 
   Future<bool> isUserJoined(

@@ -138,8 +138,12 @@ class _LoginPageState extends State<LoginPage> {
                                       decoration: TextDecoration.underline),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
-                                      Constants.nextScreen(
-                                          context, RegisterPage());
+                                      Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  RegisterPage()),
+                                          (route) => false);
                                     })
                             ]),
                       ),

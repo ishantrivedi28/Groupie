@@ -149,7 +149,7 @@ class _ChatPageState extends State<ChatPage> {
   sendMessages() {
     if (messageController.text.isNotEmpty) {
       Map<String, dynamic> chatMessageMap = {
-        'message': messageController.text,
+        'message': messageController.text.trim(),
         'sender': widget.userName,
         'time': DateTime.now().microsecondsSinceEpoch
       };
