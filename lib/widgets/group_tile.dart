@@ -23,11 +23,14 @@ class GroupTile extends StatefulWidget {
 
 class _GroupTileState extends State<GroupTile> {
   Stream<DocumentSnapshot>? stream;
+
   getLastMessage() async {
+    print(widget.groupName);
     CollectionReference groupCollection = DatabaseService().groupCollection;
     DocumentReference query = groupCollection.doc(widget.groupId);
-
-    stream = query.snapshots();
+    setState(() {
+      stream = query.snapshots();
+    });
 
     //       List<DocumentSnapshot> docssnapshots = stream.docs();
 

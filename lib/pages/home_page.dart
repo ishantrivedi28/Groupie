@@ -277,6 +277,11 @@ class _HomePageState extends State<HomePage> {
                           Navigator.of(context).pop();
                           showSnackbar(context, Colors.green,
                               "Group created successfully!");
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomePage()),
+                              (route) => false);
                         });
                       });
                     }
