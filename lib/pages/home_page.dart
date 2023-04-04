@@ -255,11 +255,12 @@ class _HomePageState extends State<HomePage> {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  if (allGroupNames.contains(groupName)) {
+                  await getAllGroups();
+                  if (allGroupNames.contains(groupName.toLowerCase())) {
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                            '  "Group Already exist! Choose a different Name"')));
+                            "Group Already exist! Choose a different Name")));
                   } else {
                     if (groupName != '') {
                       setState(() {

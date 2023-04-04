@@ -181,12 +181,13 @@ class _SearchPageState extends State<SearchPage> {
                   context, Colors.green, "Successfully joined the group!");
             });
             Future.delayed(Duration(seconds: 2), () {
-              Constants.nextScreen(
-                  context,
-                  ChatPage(
-                      groupId: groupId,
-                      groupName: groupName,
-                      userName: userName));
+              if (this.mounted)
+                Constants.nextScreen(
+                    context,
+                    ChatPage(
+                        groupId: groupId,
+                        groupName: groupName,
+                        userName: userName));
             });
           } else {
             setState(() {

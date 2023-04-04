@@ -38,7 +38,7 @@ class DatabaseService {
     List<String> allGroupNames = [];
 
     for (var x in snaps.docs) {
-      allGroupNames.add(x['groupName']);
+      allGroupNames.add(x['groupName'].toString().toLowerCase());
     }
     return allGroupNames;
   }
